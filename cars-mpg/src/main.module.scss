@@ -1,3 +1,6 @@
 .main {
-    display: grid;
+  display: grid;
+
+  > h1 { padding-left: 2rem; color: var(--mdc-theme-primary, #6200ee) }
+  > section { padding: 1rem 2rem 3rem; }
 }

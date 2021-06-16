@@ -49,7 +49,7 @@ export const TD: FC<TdHTMLAttributes<HTMLTableDataCellElement>> = ({ children, c
   </td>
 );
 
-export const DataTable: FC<TableHTMLAttributes<HTMLTableElement>> = ({ children, className, ...rest }) => {
+export const Table: FC<TableHTMLAttributes<HTMLTableElement>> = ({ children, className, ...rest }) => {
   const [, initialize] = useMDCInit(MDCDataTable);
 
   return (
