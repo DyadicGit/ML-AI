@@ -1,6 +1,7 @@
 import { useMDCInit } from '../utils';
 import { MDCDataTable } from '@material/data-table';
 import { MDCRipple } from '@material/ripple';
+import { MDCTabBar } from '@material/tab-bar';
 import cx from 'classnames';
 import './components.scss';
 import {
@@ -12,7 +13,7 @@ import {
   ThHTMLAttributes,
 } from 'react';
 
-const THead: FC<HTMLAttributes<HTMLTableRowElement>> = ({ children, className, ...rest }) => (
+export const THead: FC<HTMLAttributes<HTMLTableRowElement>> = ({ children, className, ...rest }) => (
   <thead>
     <tr className={cx('mdc-data-table__header-row', className)} {...rest}>
       {children}
@@ -20,29 +21,29 @@ const THead: FC<HTMLAttributes<HTMLTableRowElement>> = ({ children, className, .
   </thead>
 );
 
-const THC: FC<ThHTMLAttributes<HTMLTableHeaderCellElement>> = ({ children, className, ...rest }) => (
+export const THC: FC<ThHTMLAttributes<HTMLTableHeaderCellElement>> = ({ children, className, ...rest }) => (
   <th className={cx('mdc-data-table__header-cell', className)} role="columnheader" scope="col" {...rest}>
     {children}
   </th>
 );
-const TH: FC<ThHTMLAttributes<HTMLTableHeaderCellElement>> = ({ children, className, ...rest }) => (
+export const TH: FC<ThHTMLAttributes<HTMLTableHeaderCellElement>> = ({ children, className, ...rest }) => (
   <th className={cx('mdc-data-table__cell', className)} {...rest}>
     {children}
   </th>
 );
-const TBody: FC<HTMLAttributes<HTMLTableSectionElement>> = ({ children, className, ...rest }) => (
+export const TBody: FC<HTMLAttributes<HTMLTableSectionElement>> = ({ children, className, ...rest }) => (
   <tbody className="mdc-data-table__content" {...rest}>
     {children}
   </tbody>
 );
 
-const TR: FC<HTMLAttributes<HTMLTableRowElement>> = ({ children, className, ...rest }) => (
+export const TR: FC<HTMLAttributes<HTMLTableRowElement>> = ({ children, className, ...rest }) => (
   <tr className="mdc-data-table__row" {...rest}>
     {children}
   </tr>
 );
 
-const TD: FC<TdHTMLAttributes<HTMLTableDataCellElement>> = ({ children, className, ...rest }) => (
+export const TD: FC<TdHTMLAttributes<HTMLTableDataCellElement>> = ({ children, className, ...rest }) => (
   <td className={cx('mdc-data-table__cell', className)} {...rest}>
     {children}
   </td>
@@ -55,20 +56,7 @@ export const DataTable: FC<TableHTMLAttributes<HTMLTableElement>> = ({ children,
     <div className={cx('mdc-data-table', className)} ref={initialize}>
       <div className="mdc-data-table__table-container">
         <table className="mdc-data-table__table" {...rest}>
-          <THead>
-            <THC>Dessert</THC>
-            <THC className="mdc-data-table__header-cell--numeric">Carbs (g)</THC>
-            <THC className="mdc-data-table__header-cell--numeric">Protein (g)</THC>
-            <THC>Comments</THC>
-          </THead>
-          <TBody>
-            <TR>
-              <TH scope="row">Frozen yogurt</TH>
-              <TD className="mdc-data-table__cell--numeric">24</TD>
-              <TD className="mdc-data-table__cell--numeric">4.0</TD>
-              <TD>Super tasty</TD>
-            </TR>
-          </TBody>
+          {children}
         </table>
       </div>
     </div>
@@ -88,3 +76,39 @@ export const Button: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ children, 
     </div>
   );
 };
+
+type TabsType = FC<HTMLAttributes<HTMLDivElement>>;
+export const Tabs: TabsType = ({ children, className, ...rest }) => {
+  const [, initialize] = useMDCInit(MDCTabBar);
+  return (
+    <div ref={initialize} className={cx('mdc-tab-bar', className)} role="tablist" {...rest}>
+      <div className="mdc-tab-scroller">
+        <div className="mdc-tab-scroller__scroll-area">
+          <div className="mdc-tab-scroller__scroll-content">{children}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+type TabType = FC<ButtonHTMLAttributes<HTMLButtonElement> & { label?: string; active?: boolean }>;
+export const Tab: TabType = ({ label, active, children, className, ...rest }) => (
+  <button
+    className={cx('mdc-tab', active && 'mdc-tab--active', className)}
+    role="tab"
+    aria-selected="true"
+    tabIndex={0}
+    {...rest}
+  >
+    <span className="mdc-tab__content">
+      <span className="mdc-tab__icon material-icons" aria-hidden="true">
+        {children}
+      </span>
+      <span className="mdc-tab__text-label">{label}</span>
+    </span>
+    <span className={cx('mdc-tab-indicator', active && 'mdc-tab-indicator--active')}>
+      <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline" />
+    </span>
+    <span className="mdc-tab__ripple" />
+  </button>
+);
