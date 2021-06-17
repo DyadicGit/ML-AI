@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
-import { Button, Table, Tab, Tabs, TBody, TD, THC, THead, TR } from './components';
+import { Button, Table, Tabs, TBody, TD, THC, THead, TR, NavTab } from './components';
 import carsJson from './data/cars.json';
 import styles from './main.module.scss';
 
@@ -14,22 +14,6 @@ type Car = {
   acceleration: number;
   modelyear: number;
   carname: string;
-};
-
-// @ts-ignore
-type Of<T> = Parameters<T>['0'];
-
-const NavTab: FC<Of<typeof Tab> & { to: string }> = ({ to, ...rest }) => {
-  const history = useHistory();
-  return (
-    <Tab
-      {...rest}
-      onClick={() => {
-        history.push(to);
-      }}
-      active={history.location.pathname === to}
-    />
-  );
 };
 
 const Main = () => (
