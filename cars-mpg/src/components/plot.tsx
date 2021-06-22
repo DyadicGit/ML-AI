@@ -18,40 +18,37 @@ const data = {
 const defaultConfig: ChartConfiguration = {
   type: 'line',
   data,
-  options: {},
+  options: { responsive: true },
 };
 
-const size = () => {
-  const height = window.innerHeight;
-  const width = window.innerWidth;
-  return { width: width * 0.9, height: height * 0.4 };
-};
-
-type PlotProps = { config?: ChartConfiguration };
+type PlotProps = { config?: Partial<ChartConfiguration> };
 
 const Plot: FC<PlotProps> = ({ config }) => {
   const [chart, setChart] = useState<ChartJs>();
   const canvas = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    let chart$: ChartJs;
     if (canvas?.current) {
-      setChart(new ChartJs(canvas.current, { ...defaultConfig, ...config }));
+      chart$ = new ChartJs(canvas.current, { ...defaultConfig });
+      setChart(chart$);
     }
 
-    return () => chart?.destroy();
-  }, []);
+    return () => chart$?.destroy();
+  }, [setChart]);
 
   useEffect(() => {
-    const listener = () => {
-      const { width, height } = size();
-      chart?.resize(width, height);
-    };
-    window.addEventListener('resize', listener);
+    if (chart) {
+      chart.config.data = { ...defaultConfig.data, ...config?.data };
+      chart.update();
+    }
+  }, [config, chart]);
 
-    return () => window.removeEventListener('resize', listener);
-  }, [!!chart]);
-
-  return <canvas width={size().width} height={size().height} ref={canvas} />;
+  return (
+    <div className="chart-container" style={{ position: 'relative', height: '40vh', width: '90vw' }}>
+      <canvas ref={canvas} />
+    </div>
+  );
 };
 
 export default Plot;

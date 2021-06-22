@@ -2,11 +2,12 @@ import { Button } from '../components';
 import LinearRegression from './linear-regression';
 import carsJson from '../data/cars.json';
 import { Car } from '../types';
-import Plot from './plot';
+import { ChartConfiguration } from 'chart.js';
+import { Plot } from '../components';
+import { useState } from 'react';
 
 const shuffle = require('lodash.shuffle');
 
-type ToUnion<T extends any[]> = T[number];
 const splitTest = 50;
 
 type DataRow = Array<[number, number, number]>;
@@ -26,29 +27,60 @@ const rawTestLabels = (shuffle(rawTestData.map(filterColumns(labelColumns))) as 
 
 const regression = new LinearRegression(rawFeatures, rawLabels, {
   learningRate: 0.1,
-  iterations: 3,
+  iterations: 50,
   batchSize: 10,
 });
 
-regression.train();
-const r2 = regression.test(rawTestFeatures, rawTestLabels);
+const runRegression = () => {
+  regression.train();
+  const r2 = regression.test(rawTestFeatures, rawTestLabels);
+  console.log('R2 is', r2);
 
-//
-// plot({
-//   x: regression.mseHistory.reverse(),
-//   xLabel: 'Iteration #',
-//   yLabel: 'Mean Squared Error',
-// });
+  regression.predict([[120, 2, 380]]).print();
+};
+const rawDataByMpg = rawData.sort((a, b) => a.mpg - b.mpg);
 
-console.log('R2 is', r2);
+const mpgDependencies: Partial<ChartConfiguration> = {
+  data: {
+    labels: rawDataByMpg.flatMap(filterColumns(labelColumns)),
+    datasets: [
+      {
+        label: 'Mean Squared Error timeline',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: rawDataByMpg.flatMap(filterColumns(['horsepower'])) as any as number[],
+      },
+    ],
+  },
+};
 
-regression.predict([[120, 2, 380]]).print();
+const Home = () => {
+  const [iterationVsMeanSqrError, setIterationVsMeanSqrError] = useState<Partial<ChartConfiguration>>();
 
-const Home = () => (
-  <section>
-    <Plot />
-    <Button>click me</Button>
-  </section>
-);
+  const start = () => {
+    runRegression();
+    const iterationVsMeanSqrError: Partial<ChartConfiguration> = {
+      data: {
+        labels: [...regression.mseHistory.keys()],
+        datasets: [
+          {
+            label: 'Mean Squared Error timeline',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: regression.mseHistory,
+          },
+        ],
+      },
+    };
+    setIterationVsMeanSqrError(iterationVsMeanSqrError);
+  };
+  return (
+    <section>
+      <Plot config={mpgDependencies} />
+      <Button onClick={start}>start training</Button>
+      <Plot config={iterationVsMeanSqrError} />
+    </section>
+  );
+};
 
 export default Home;

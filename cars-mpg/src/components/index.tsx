@@ -3,7 +3,7 @@ import { Tab } from "./mdc";
 import { useHistory } from "react-router-dom";
 
 export { Tab, Tabs, TBody, TD, THC, THead, TR, Button, Table, TH } from './mdc'
-
+export { default as Plot } from './plot'
 // @ts-ignore
 export type Of<T> = Parameters<T>['0'];
 

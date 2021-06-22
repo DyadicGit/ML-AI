@@ -9,3 +9,4 @@ export type Car = {
   modelyear: number;
   carname: string;
 };
+export type ToUnion<T extends any[]> = T[number];
