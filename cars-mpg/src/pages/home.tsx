@@ -2,7 +2,7 @@ import { Button } from '../components';
 import LinearRegression from './linear-regression';
 import carsJson from '../data/cars.json';
 import { Car } from '../types';
-import { ChartConfiguration } from 'chart.js';
+import { ChartConfiguration, ChartDataset, ScatterDataPoint } from 'chart.js';
 import { Plot } from '../components';
 import { useState } from 'react';
 
@@ -38,19 +38,49 @@ const runRegression = () => {
 
   regression.predict([[120, 2, 380]]).print();
 };
-const rawDataByMpg = rawData.sort((a, b) => a.mpg - b.mpg);
 
-const mpgDependencies: Partial<ChartConfiguration> = {
+const byMPG = (a: Car, b: Car) => a.mpg - b.mpg;
+const byNumber = (a: number, b: number) => a - b;
+
+const carsByMpg = (carsJson as Car[]).sort(byMPG).map((car) => ({ ...car, x: car.mpg, weight: car.weight * 100 })) as any as ScatterDataPoint[];
+
+const xMpg = (carsByMpg as any as Car[]).map((s) => s.mpg);
+
+const red = { borderColor: 'red', borderRadius: 1, borderWidth: 1 };
+const blue = { borderColor: 'blue', borderRadius: 1, borderWidth: 1 };
+const green = { borderColor: 'green', borderRadius: 1, borderWidth: 1 };
+
+const yWeight: ChartDataset = {
+  data: carsByMpg,
+  label: 'Weight',
+  ...red,
+  parsing: {
+    yAxisKey: 'weight',
+  },
+};
+
+const yDisplacement: ChartDataset = {
+  data: carsByMpg,
+  label: 'Engine displacement',
+  ...blue,
+  parsing: {
+    yAxisKey: 'displacement',
+  },
+};
+
+const yHorsepower: ChartDataset = {
+  data: carsByMpg,
+  label: 'Horsepower',
+  ...green,
+  parsing: {
+    yAxisKey: 'horsepower',
+  },
+};
+const mpgDependencies: ChartConfiguration = {
+  type: 'line',
   data: {
-    labels: rawDataByMpg.flatMap(filterColumns(labelColumns)),
-    datasets: [
-      {
-        label: 'Mean Squared Error timeline',
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgb(255, 99, 132)',
-        data: rawDataByMpg.flatMap(filterColumns(['horsepower'])) as any as number[],
-      },
-    ],
+    labels: xMpg,
+    datasets: [yWeight, yDisplacement, yHorsepower],
   },
 };
 

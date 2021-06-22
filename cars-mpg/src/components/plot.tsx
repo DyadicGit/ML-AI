@@ -17,7 +17,8 @@ const data = {
 
 const defaultConfig: ChartConfiguration = {
   type: 'line',
-  data,
+// @ts-ignore
+  data: null,
   options: { responsive: true },
 };
 
