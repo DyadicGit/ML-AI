@@ -2,6 +2,7 @@ import { Button } from '../components';
 import LinearRegression from './linear-regression';
 import carsJson from '../data/cars.json';
 import { Car } from '../types';
+import Plot from './plot';
 
 const shuffle = require('lodash.shuffle');
 
@@ -31,6 +32,7 @@ const regression = new LinearRegression(rawFeatures, rawLabels, {
 
 regression.train();
 const r2 = regression.test(rawTestFeatures, rawTestLabels);
+
 //
 // plot({
 //   x: regression.mseHistory.reverse(),
@@ -44,6 +46,7 @@ regression.predict([[120, 2, 380]]).print();
 
 const Home = () => (
   <section>
+    <Plot />
     <Button>click me</Button>
   </section>
 );
