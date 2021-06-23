@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "linear-regression/index.js",
-  "scripts": {},
+  "scripts": {
+    "linear-regression": "node ./linear-regression/index.js"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {

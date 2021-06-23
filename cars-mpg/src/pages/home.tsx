@@ -18,8 +18,8 @@ const labelColumns = ['mpg'];
 const filterColumns = (columns: string[]) => (data: Car): string[] =>
   columns.reduce((acc, key) => acc.concat((data as any)[key]), [] as string[]);
 
-const rawData = shuffle((carsJson as Car[]).slice(0, -1 * splitTest));
-const rawTestData = shuffle((carsJson as Car[]).slice(-1 * splitTest));
+const rawData: Car[] = shuffle((carsJson as Car[]).slice(0, -1 * splitTest));
+const rawTestData: Car[] = shuffle((carsJson as Car[]).slice(-1 * splitTest));
 const rawFeatures = (rawData.map(filterColumns(dataColumns)) as any) as DataRow;
 const rawTestFeatures = (rawTestData.map(filterColumns(dataColumns)) as any) as DataRow;
 const rawLabels = (rawData.map(filterColumns(labelColumns)) as any) as LabelRow;
@@ -31,12 +31,21 @@ const regression = new LinearRegression(rawFeatures, rawLabels, {
   batchSize: 10,
 });
 
+// @ts-ignore
+window.regression = regression;
+
 const runRegression = () => {
   regression.train();
   const r2 = regression.test(rawTestFeatures, rawTestLabels);
   console.log('R2 is', r2);
 
-  regression.predict([[120, 2, 380]]).print();
+  const predictMe = [[120, 2, 380]];
+  console.log(
+    'predict ',
+    predictMe.map((s) => `${s[0]}hp ${s[1]}ton ${s[2]}in^3`).join(';'),
+    ' result is :',
+    regression.predict(predictMe as any).arraySync()
+  );
 };
 
 const byMPG = (a: Car, b: Car) => a.mpg - b.mpg;
