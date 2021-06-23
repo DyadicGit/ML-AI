@@ -3,21 +3,9 @@ import { FC, useEffect, useRef, useState } from 'react';
 
 ChartJs.register(...registerables);
 
-const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-  datasets: [
-    {
-      label: 'My First dataset',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: [0, 10, 5, 2, 20, 30, 45],
-    },
-  ],
-};
-
 const defaultConfig: ChartConfiguration = {
   type: 'line',
-// @ts-ignore
+  // @ts-ignore
   data: null,
   options: { responsive: true },
 };
@@ -46,7 +34,7 @@ const Plot: FC<PlotProps> = ({ config }) => {
   }, [config, chart]);
 
   return (
-    <div className="chart-container" style={{ position: 'relative', height: '40vh', width: '90vw' }}>
+    <div className="chart-container" style={{ height: '40vh', width: '90vw' }}>
       <canvas ref={canvas} />
     </div>
   );

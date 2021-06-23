@@ -18,15 +18,15 @@ const labelColumns = ['mpg'];
 const filterColumns = (columns: string[]) => (data: Car): string[] =>
   columns.reduce((acc, key) => acc.concat((data as any)[key]), [] as string[]);
 
-const rawData = (carsJson as Car[]).slice(0, -1 * splitTest);
-const rawTestData = (carsJson as Car[]).slice(-1 * splitTest);
-const rawFeatures = (shuffle(rawData.map(filterColumns(dataColumns))) as any) as DataRow;
-const rawTestFeatures = (shuffle(rawTestData.map(filterColumns(dataColumns))) as any) as DataRow;
-const rawLabels = (shuffle(rawData.map(filterColumns(labelColumns))) as any) as LabelRow;
-const rawTestLabels = (shuffle(rawTestData.map(filterColumns(labelColumns))) as any) as LabelRow;
+const rawData = shuffle((carsJson as Car[]).slice(0, -1 * splitTest));
+const rawTestData = shuffle((carsJson as Car[]).slice(-1 * splitTest));
+const rawFeatures = (rawData.map(filterColumns(dataColumns)) as any) as DataRow;
+const rawTestFeatures = (rawTestData.map(filterColumns(dataColumns)) as any) as DataRow;
+const rawLabels = (rawData.map(filterColumns(labelColumns)) as any) as LabelRow;
+const rawTestLabels = (rawTestData.map(filterColumns(labelColumns)) as any) as LabelRow;
 
 const regression = new LinearRegression(rawFeatures, rawLabels, {
-  learningRate: 0.1,
+  learningRate: 0.2,
   iterations: 50,
   batchSize: 10,
 });
@@ -40,11 +40,12 @@ const runRegression = () => {
 };
 
 const byMPG = (a: Car, b: Car) => a.mpg - b.mpg;
-const byNumber = (a: number, b: number) => a - b;
 
-const carsByMpg = (carsJson as Car[]).sort(byMPG).map((car) => ({ ...car, x: car.mpg, weight: car.weight * 100 })) as any as ScatterDataPoint[];
+const carsByMpg = ((carsJson as Car[])
+  .sort(byMPG)
+  .map((car) => ({ ...car, x: car.mpg, weight: car.weight * 100 })) as any) as ScatterDataPoint[];
 
-const xMpg = (carsByMpg as any as Car[]).map((s) => s.mpg);
+const xMpg = ((carsByMpg as any) as Car[]).map((s) => s.mpg);
 
 const red = { borderColor: 'red', borderRadius: 1, borderWidth: 1 };
 const blue = { borderColor: 'blue', borderRadius: 1, borderWidth: 1 };
@@ -89,9 +90,9 @@ const Home = () => {
 
   const start = () => {
     runRegression();
-    const iterationVsMeanSqrError: Partial<ChartConfiguration> = {
+    const config: Partial<ChartConfiguration> = {
       data: {
-        labels: [...regression.mseHistory.keys()],
+        labels: [...regression.mseHistory.reverse().keys()],
         datasets: [
           {
             label: 'Mean Squared Error timeline',
@@ -102,7 +103,7 @@ const Home = () => {
         ],
       },
     };
-    setIterationVsMeanSqrError(iterationVsMeanSqrError);
+    setIterationVsMeanSqrError(config);
   };
   return (
     <section>
