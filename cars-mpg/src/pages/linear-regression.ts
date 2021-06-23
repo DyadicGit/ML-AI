@@ -31,7 +31,7 @@ class LinearRegression {
 
     const slopes = features.transpose().matMul(differences).div(features.shape[0]);
 
-    this.weights = this.weights.sub(slopes.mul(this.options.learningRate));
+    return this.weights.sub(slopes.mul(this.options.learningRate));
   }
 
   train() {
@@ -45,7 +45,7 @@ class LinearRegression {
         const featureSlice = this.features.slice([startIndex, 0], [batchSize, -1]);
         const labelSlice = this.labels.slice([startIndex, 0], [batchSize, -1]);
 
-        this.gradientDescent(featureSlice, labelSlice);
+        this.weights = this.gradientDescent(featureSlice, labelSlice);
       }
 
       this.recordMSE();
