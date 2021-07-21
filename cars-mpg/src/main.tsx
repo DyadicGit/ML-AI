@@ -3,6 +3,7 @@ import { NavTab, Tabs } from './components';
 import Home from './pages/home';
 import OurData from './pages/our-data';
 import styles from './main.module.scss';
+import WalkThrough from "./pages/walk-through";
 
 const Main = () => (
   <Router>
@@ -13,6 +14,7 @@ const Main = () => (
         <Tabs>
           <NavTab to="/">Home</NavTab>
           <NavTab to="/data">Data</NavTab>
+          <NavTab to="/walk-through">Walk through</NavTab>
         </Tabs>
       </nav>
       <Switch>
@@ -21,6 +23,9 @@ const Main = () => (
         </Route>
         <Route path="/data">
           <OurData />
+        </Route>
+        <Route path="/walk-through">
+          <WalkThrough />
         </Route>
       </Switch>
     </main>
