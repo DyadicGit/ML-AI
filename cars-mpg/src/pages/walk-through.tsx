@@ -43,8 +43,8 @@ const trainY = [
   1.3,
 ];
 
-const m = tf.variable(tf.scalar(Math.random()));
-const b = tf.variable(tf.scalar(Math.random()));
+const m = tf.variable(tf.scalar(0));
+const b = tf.variable(tf.scalar(0));
 
 function predict(x: Tensor) {
   return tf.tidy(function () {
@@ -86,7 +86,7 @@ function trainAndUpdate() {
 const predictionsBefore = predict(tf.tensor1d(trainX));
 
 const config: Partial<ChartConfiguration> = {
-  type: 'line',
+  type: 'scatter',
   data: {
     datasets: [
       {
@@ -94,6 +94,7 @@ const config: Partial<ChartConfiguration> = {
         showLine: false,
         data: plotData(),
         type: 'scatter',
+        backgroundColor: 'black'
       },
       {
         label: 'Y = ' + m.dataSync()[0] + 'X + ' + b.dataSync()[0],
@@ -101,7 +102,6 @@ const config: Partial<ChartConfiguration> = {
           { x: 0, y: b.dataSync()[0] },
           { x: 11, y: 11 * m.dataSync()[0] + b.dataSync()[0] },
         ],
-        // Changes this dataset to become a line
         type: 'line',
         borderColor: 'red',
         fill: false,
@@ -111,21 +111,6 @@ const config: Partial<ChartConfiguration> = {
   options: {
     responsive: true,
     animation: false,
-    scales: {
-      x: {
-        display: true,
-        axis: 'x',
-        min: 0,
-        max: 11,
-        position: 'bottom',
-      },
-      y: {
-        axis: 'y',
-        min: 0,
-        max: 20,
-        display: true,
-      },
-    },
   },
 };
 
