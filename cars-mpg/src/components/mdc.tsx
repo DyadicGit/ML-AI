@@ -100,6 +100,16 @@ export const Button: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ children, 
   );
 };
 
+export const ContainedButton: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ children, className, ...rest }) => {
+  const [, initialize] = useMDCInit(MDCRipple);
+
+  return (
+    <button ref={initialize} className={cx('mdc-button mdc-button--raised', className)} {...rest}>
+      <span className="mdc-button__label">{children}</span>
+    </button>
+  );
+};
+
 type TabsType = FC<HTMLAttributes<HTMLDivElement>>;
 export const Tabs: TabsType = ({ children, className, ...rest }) => {
   const [, initialize] = useMDCInit(MDCTabBar);

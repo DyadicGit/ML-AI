@@ -87,10 +87,15 @@ const yHorsepower: ChartDataset = {
   },
 };
 const mpgDependencies: ChartConfiguration = {
-  type: 'line',
+  type: 'scatter',
   data: {
     labels: xMpg,
     datasets: [yWeight, yDisplacement, yHorsepower],
+  },
+  options: {
+    scales: {
+      x: { title: { text: 'mpg', display: true } },
+    },
   },
 };
 

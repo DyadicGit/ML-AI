@@ -7,6 +7,7 @@ const defaultConfig: ChartConfiguration = {
   type: 'line',
   // @ts-ignore
   data: null,
+  plugins: undefined,
   options: { responsive: true },
 };
 
@@ -19,7 +20,8 @@ const Plot: FC<PlotProps> = ({ config }) => {
   useEffect(() => {
     let chart$: ChartJs;
     if (canvas?.current) {
-      chart$ = new ChartJs(canvas.current, { ...defaultConfig });
+      // @ts-ignore
+      chart$ = new ChartJs(canvas.current, config || defaultConfig );
       setChart(chart$);
     }
 
@@ -29,12 +31,15 @@ const Plot: FC<PlotProps> = ({ config }) => {
   useEffect(() => {
     if (chart) {
       chart.config.data = { ...defaultConfig.data, ...config?.data };
+      // @ts-ignore
+      chart.options = config?.options || defaultConfig.options
+
       chart.update();
     }
   }, [config, chart]);
 
   return (
-    <div className="chart-container" style={{ height: '40vh', width: '90vw' }}>
+    <div className="chart-container">
       <canvas ref={canvas} />
     </div>
   );
