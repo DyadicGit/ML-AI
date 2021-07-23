@@ -10,3 +10,14 @@ export type Car = {
   carname: string;
 };
 export type ToUnion<T extends any[]> = T[number];
+
+// fix for @tensorflow/tfjs-vis overriding ReactElement type
+declare global {
+  namespace React {
+    interface ReactElement {
+      nodeName: any
+      attributes: any
+      children: any
+    }
+  }
+}

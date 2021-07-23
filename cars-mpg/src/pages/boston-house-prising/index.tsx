@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import * as tf from '@tensorflow/tfjs';
-// import * as tfvis from '@tensorflow/tfjs-vis';
+import * as tfvis from '@tensorflow/tfjs-vis';
 import { BostonHousingDataset, featureDescriptions } from './data';
 import * as normalization from './normalization';
 import * as ui from './ui';
@@ -138,7 +138,7 @@ export async function run(model, modelName, weightsIllustration) {
       onEpochEnd: async (epoch, logs) => {
         await ui.updateModelStatus(`Epoch ${epoch + 1} of ${NUM_EPOCHS} completed.`, modelName);
         trainLogs.push(logs);
-        // tfvis.show.history(container, trainLogs, ['loss', 'val_loss']);
+        tfvis.show.history(container, trainLogs, ['loss', 'val_loss']);
         if (weightsIllustration) {
           model.layers[0]
             .getWeights()[0]
@@ -183,7 +183,21 @@ async function DOMContentLoaded() {
   // Instance
   ui.updateBaselineStatus('Estimating baseline loss');
   computeBaseline();
-  await ui.setup();
+}
+
+async function trainSimpleLinearRegression() {
+  const model = linearRegressionModel();
+  await run(model, 'linear', true);
+}
+
+async function trainNeuralNetworkLinearRegression1Hidden() {
+  const model = multiLayerPerceptronRegressionModel1Hidden();
+  await run(model, 'oneHidden', false);
+}
+
+async function trainNeuralNetworkLinearRegression2Hidden() {
+  const model = multiLayerPerceptronRegressionModel2Hidden();
+  await run(model, 'twoHidden', false);
 }
 
 const BostonHousePrising = () => {
@@ -241,9 +255,13 @@ const BostonHousePrising = () => {
 
         <div id="buttons">
           <div className="with-cols">
-            <button id="simple-mlr">Train Linear Regressor</button>
-            <button id="nn-mlr-1hidden">Train Neural Network Regressor (1 hidden layer)</button>
-            <button id="nn-mlr-2hidden">Train Neural Network Regressor (2 hidden layers)</button>
+            <button onClick={trainSimpleLinearRegression}>Train Linear Regressor</button>
+            <button onClick={trainNeuralNetworkLinearRegression1Hidden}>
+              Train Neural Network Regressor (1 hidden layer)
+            </button>
+            <button onClick={trainNeuralNetworkLinearRegression2Hidden}>
+              Train Neural Network Regressor (2 hidden layers)
+            </button>
           </div>
         </div>
       </section>
