@@ -30,9 +30,7 @@ function train() {
 
   optimizer.minimize(() => {
     const predsYs = predict(tf.tensor1d(trainX));
-    console.log(predsYs);
     const stepLoss = loss(predsYs, tf.tensor1d(trainY));
-    console.log(stepLoss.dataSync()[0]);
     return stepLoss as Scalar;
   });
 }
