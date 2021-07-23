@@ -2,10 +2,11 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { NavTab, Tabs } from './components';
 import Home from './pages/home';
 import OurData from './pages/our-data';
-import styles from './main.module.scss';
-import WalkThrough from "./pages/walk-through";
+import WalkThrough from './pages/walk-through';
+import BostonHousePrising from './pages/boston-house-prising';
+import styles from './app.module.scss';
 
-const Main = () => (
+const App = () => (
   <Router>
     <main className={styles.main}>
       <h1 className="text-center text-3xl">Machine Learning for cars mpg</h1>
@@ -15,6 +16,7 @@ const Main = () => (
           <NavTab to="/">Home</NavTab>
           <NavTab to="/data">Data</NavTab>
           <NavTab to="/walk-through">Walk through</NavTab>
+          <NavTab to="/boston-house-prising">Boston house prising</NavTab>
         </Tabs>
       </nav>
       <Switch>
@@ -27,9 +29,12 @@ const Main = () => (
         <Route path="/walk-through">
           <WalkThrough />
         </Route>
+        <Route path="/boston-house-prising">
+          <BostonHousePrising />
+        </Route>
       </Switch>
     </main>
   </Router>
 );
 
-export default Main;
+export default App;

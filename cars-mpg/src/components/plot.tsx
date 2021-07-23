@@ -26,6 +26,7 @@ const Plot: FC<PlotProps> = ({ config }) => {
     }
 
     return () => chart$?.destroy();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setChart]);
 
   useEffect(() => {
