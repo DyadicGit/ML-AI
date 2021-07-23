@@ -14,6 +14,7 @@
  * limitations under the License.
  * =============================================================================
  */
+// @ts-nocheck
 const Papa = require('papaparse');
 // Boston Housing data constants:
 const BASE_URL =

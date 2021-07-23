@@ -1,10 +1,12 @@
+// @ts-nocheck
+
+import { useEffect } from 'react';
 import * as tf from '@tensorflow/tfjs';
-import * as tfvis from '@tensorflow/tfjs-vis';
+// import * as tfvis from '@tensorflow/tfjs-vis';
 import { BostonHousingDataset, featureDescriptions } from './data';
 import * as normalization from './normalization';
 import * as ui from './ui';
 import './boston-house-prising.css';
-import { useEffect } from "react";
 // Some hyperparameters for model training.
 const NUM_EPOCHS = 200;
 const BATCH_SIZE = 40;
@@ -14,26 +16,13 @@ const tensors = {};
 // Convert loaded data into tensors and creates normalized versions of the
 // features.
 export function arraysToTensors() {
-  // @ts-ignore
   tensors.rawTrainFeatures = tf.tensor2d(bostonData.trainFeatures);
-  // @ts-ignore
   tensors.trainTarget = tf.tensor2d(bostonData.trainTarget);
-  // @ts-ignore
   tensors.rawTestFeatures = tf.tensor2d(bostonData.testFeatures);
-  // @ts-ignore
   tensors.testTarget = tf.tensor2d(bostonData.testTarget);
   // Normalize mean and standard deviation of data.
-  let { dataMean, dataStd } =
-    // @ts-ignore
-    normalization.determineMeanAndStddev(tensors.rawTrainFeatures);
-  // @ts-ignore
-  tensors.trainFeatures = normalization.normalizeTensor(
-    // @ts-ignore
-    tensors.rawTrainFeatures,
-    dataMean,
-    dataStd
-  );
-  // @ts-ignore
+  let { dataMean, dataStd } = normalization.determineMeanAndStddev(tensors.rawTrainFeatures);
+  tensors.trainFeatures = normalization.normalizeTensor(tensors.rawTrainFeatures, dataMean, dataStd);
   tensors.testFeatures = normalization.normalizeTensor(tensors.rawTestFeatures, dataMean, dataStd);
 }
 /**
@@ -141,7 +130,6 @@ export async function run(model, modelName, weightsIllustration) {
   let trainLogs = [];
   const container = document.querySelector(`#${modelName} .chart`);
   ui.updateStatus('Starting training process...');
-  // @ts-ignore
   await model.fit(tensors.trainFeatures, tensors.trainTarget, {
     batchSize: BATCH_SIZE,
     epochs: NUM_EPOCHS,
@@ -150,8 +138,7 @@ export async function run(model, modelName, weightsIllustration) {
       onEpochEnd: async (epoch, logs) => {
         await ui.updateModelStatus(`Epoch ${epoch + 1} of ${NUM_EPOCHS} completed.`, modelName);
         trainLogs.push(logs);
-        // @ts-ignore
-        tfvis.show.history(container, trainLogs, ['loss', 'val_loss']);
+        // tfvis.show.history(container, trainLogs, ['loss', 'val_loss']);
         if (weightsIllustration) {
           model.layers[0]
             .getWeights()[0]
@@ -165,15 +152,9 @@ export async function run(model, modelName, weightsIllustration) {
     },
   });
   ui.updateStatus('Running on test data...');
-  const result = model.evaluate(
-    // @ts-ignore
-    tensors.testFeatures,
-    // @ts-ignore
-    tensors.testTarget,
-    {
-      batchSize: BATCH_SIZE,
-    }
-  );
+  const result = model.evaluate(tensors.testFeatures, tensors.testTarget, {
+    batchSize: BATCH_SIZE,
+  });
   const testLoss = result.dataSync()[0];
   const trainLoss = trainLogs[trainLogs.length - 1].loss;
   const valLoss = trainLogs[trainLogs.length - 1].val_loss;
@@ -185,10 +166,8 @@ export async function run(model, modelName, weightsIllustration) {
   );
 }
 export function computeBaseline() {
-  // @ts-ignore
   const avgPrice = tensors.trainTarget.mean();
   console.log(`Average price: ${avgPrice.dataSync()}`);
-  // @ts-ignore
   const baseline = tensors.testTarget.sub(avgPrice).square().mean();
   console.log(`Baseline loss: ${baseline.dataSync()}`);
   const baselineMsg = `Baseline loss (meanSquaredError) is ${baseline.dataSync()[0].toFixed(2)}`;
@@ -209,8 +188,8 @@ async function DOMContentLoaded() {
 
 const BostonHousePrising = () => {
   useEffect(() => {
-    DOMContentLoaded()
-  }, [])
+    DOMContentLoaded();
+  }, []);
   return (
     <div className="tfjs-example-container centered-container">
       <section className="title-area">
