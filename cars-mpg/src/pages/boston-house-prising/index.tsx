@@ -179,8 +179,7 @@ async function DOMContentLoaded() {
   ui.updateStatus('Data loaded, converting to tensors');
   arraysToTensors();
   ui.updateStatus('Data is now available as tensors.\n' + 'Click a train button to begin.');
-  // TODO Explain what baseline loss is. How it is being computed in this
-  // Instance
+  // TODO Explain what baseline loss is. How it is being computed in this Instance
   ui.updateBaselineStatus('Estimating baseline loss');
   computeBaseline();
 }
