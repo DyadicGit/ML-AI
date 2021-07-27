@@ -1,13 +1,48 @@
 import * as tf from '@tensorflow/tfjs';
 import { Scalar, Tensor } from '@tensorflow/tfjs';
-import { Plot } from '../components';
+import { Plot } from '../../components';
 import { useState } from 'react';
-import { ChartConfiguration } from 'chart.js';
-import { ContainedButton } from "../components/mdc";
+import { ChartConfiguration, LineControllerDatasetOptions, LineOptions } from 'chart.js';
+import { ContainedButton } from '../../components/mdc';
 
-
-const trainX = [3.3, 4.4, 5.5, 6.71, 6.93, 4.168, 9.779, 6.182, 7.59, 2.167, 7.042, 10.791, 5.313, 7.997, 5.654, 9.27, 3.1,];
-const trainY = [1.7, 2.76, 2.09, 3.19, 1.694, 1.573, 3.366, 2.596, 2.53, 1.221, 2.827, 3.465, 1.65, 2.904, 2.42, 2.94, 1.3,];
+const trainX = [
+  3.3,
+  4.4,
+  5.5,
+  6.71,
+  6.93,
+  4.168,
+  9.779,
+  6.182,
+  7.59,
+  2.167,
+  7.042,
+  10.791,
+  5.313,
+  7.997,
+  5.654,
+  9.27,
+  3.1,
+];
+const trainY = [
+  1.7,
+  2.76,
+  2.09,
+  3.19,
+  1.694,
+  1.573,
+  3.366,
+  2.596,
+  2.53,
+  1.221,
+  2.827,
+  3.465,
+  1.65,
+  2.904,
+  2.42,
+  2.94,
+  1.3,
+];
 
 const m = tf.variable(tf.scalar(0));
 const b = tf.variable(tf.scalar(0));
@@ -72,7 +107,7 @@ const config: Partial<ChartConfiguration> = {
     responsive: true,
     animation: false,
     scales: {
-      y: {min: 0, max: 4.5}
+      y: { min: 0, max: 4.5 },
     },
     plugins: {
       legend: { labels: { font: { size: 16 } } },
@@ -80,9 +115,17 @@ const config: Partial<ChartConfiguration> = {
   },
 };
 
-const WalkThrough = () => {
+const dashed: Partial<LineControllerDatasetOptions> = {
+  pointStyle: 'circle',
+  borderColor: 'blue',
+  backgroundColor: 'blue',
+  pointBorderWidth: 4,
+  borderWidth: 2,
+  borderDash: [3, 5],
+};
+
+const SteppedLearning = () => {
   const [plotConfig, setConfig] = useState(config);
-  console.log({ config, plotConfig });
 
   const updateConfig = () => {
     train();
@@ -96,12 +139,36 @@ const WalkThrough = () => {
     setConfig({ ...config });
   };
 
+  const drawDistance = () => {
+    // @ts-ignore
+    config.data.datasets[2] = {
+      data: [
+        { x: 4.4, y: 2.76 },
+        { x: 4.4, y: 1.62 },
+      ],
+      type: 'line',
+      ...dashed,
+    };
+    // @ts-ignore
+    config.data.datasets[3] = {
+      data: [
+        { x: 3.3, y: 1.7 },
+        { x: 3.3, y: 1.25 },
+      ],
+      type: 'line',
+      ...dashed,
+    };
+    setConfig({ ...config });
+  };
+
   return (
-    <section>
+    <div>
+      <ContainedButton onClick={updateConfig} onAuxClick={drawDistance} className="mdc-button--raised">
+        Train the model by 1 step
+      </ContainedButton>
       <Plot config={plotConfig} />
-      <ContainedButton onClick={updateConfig} className="mdc-button--raised">Train the model by 1 step</ContainedButton>
-    </section>
+    </div>
   );
 };
 
-export default WalkThrough;
+export default SteppedLearning;

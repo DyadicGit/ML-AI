@@ -6,9 +6,13 @@
     width: 70vw;
   }
 }
-@media screen and (min-width: 1025px) {
+@media screen and (min-width: 1201px) {
+  .chartContainer {
+    width: 70vw;
+  }
+}
+@media screen and (min-width: 1824px) {
   .chartContainer {
     width: 50vw;
   }
 }
-
