@@ -124,8 +124,8 @@ export const Tabs: TabsType = ({ children, className, ...rest }) => {
   );
 };
 
-type TabType = FC<ButtonHTMLAttributes<HTMLButtonElement> & { label?: string; active?: boolean }>;
-export const Tab: TabType = ({ label, active, children, className, ...rest }) => (
+type TabType = FC<ButtonHTMLAttributes<HTMLButtonElement> & { icon?: string; active?: boolean }>;
+export const Tab: TabType = ({ icon, active, children, className, ...rest }) => (
   <button
     className={cx('mdc-tab', active && 'mdc-tab--active', className)}
     role="tab"
@@ -134,10 +134,12 @@ export const Tab: TabType = ({ label, active, children, className, ...rest }) =>
     {...rest}
   >
     <span className="mdc-tab__content">
-      <span className="mdc-tab__icon material-icons" aria-hidden="true">
-        {children}
-      </span>
-      <span className="mdc-tab__text-label">{label}</span>
+      {icon && (
+        <span className="mdc-tab__icon material-icons" aria-hidden="true">
+          {icon}
+        </span>
+      )}
+      <span className="mdc-tab__text-label">{children}</span>
     </span>
     <span className={cx('mdc-tab-indicator', active && 'mdc-tab-indicator--active')}>
       <span className="mdc-tab-indicator__content mdc-tab-indicator__content--underline" />

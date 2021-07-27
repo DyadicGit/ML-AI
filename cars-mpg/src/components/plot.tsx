@@ -1,5 +1,6 @@
 import { Chart as ChartJs, ChartConfiguration, registerables } from 'chart.js';
 import { FC, useEffect, useRef, useState } from 'react';
+import styles from './plot.module.scss';
 
 ChartJs.register(...registerables);
 
@@ -40,7 +41,7 @@ const Plot: FC<PlotProps> = ({ config }) => {
   }, [config, chart]);
 
   return (
-    <div className="chart-container">
+    <div className={styles.chartContainer}>
       <canvas ref={canvas} />
     </div>
   );
