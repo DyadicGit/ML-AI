@@ -100,7 +100,7 @@ const dashed: Partial<LineControllerDatasetOptions> = {
     return canv;
   },
   borderColor: 'blue',
-  backgroundColor: 'blue',
+  backgroundColor: 'transparent',
   pointBorderWidth: 4,
   borderWidth: 2,
   borderDash: [3, 5],
@@ -145,10 +145,10 @@ const SteppedLearning = () => {
 
   return (
     <div>
+      <Plot config={plotConfig} />
       <ContainedButton onClick={updateConfig} onAuxClick={drawDistance} className="mdc-button--raised">
         Train the model by 1 step
       </ContainedButton>
-      <Plot config={plotConfig} />
     </div>
   );
 };

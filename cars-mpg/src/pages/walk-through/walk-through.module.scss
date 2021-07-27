@@ -1,3 +1,19 @@
 .walkThroughPage > div {
-  margin-bottom: 30px;
+  margin-bottom: 80px;
+}
+.walkThroughPage > img {
+  width: 80%;
+}
+.walkThroughPage > img + img,
+.walkThroughPage > img + h2 {
+  margin-top: 60px;
+}
+
+.formula {
+  font-style: italic;
+  font-size: 2rem;
+}
+.accentFormula {
+  font-size: 3rem;
+  text-align: center;
 }
