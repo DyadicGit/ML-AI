@@ -21,6 +21,8 @@ const config: Partial<ChartConfiguration> = {
         borderColor: 'black',
         backgroundColor: 'black',
       },
+      // @ts-ignore; // these are placeholders
+      {label: ''},{label: ''},{label: ''},{label: ''}
     ],
   },
   options: {
@@ -56,7 +58,7 @@ const angleNr1 = () => {
     pointStyle: 'line',
     type: 'line',
     borderColor: 'red',
-    backgroundColor: 'red',
+    backgroundColor: 'transparent',
     pointBorderWidth: 0,
     borderWidth: 2,
     borderDash: [6, 10]
@@ -90,7 +92,7 @@ const angleNr2 = () => {
     pointStyle: 'line',
     type: 'line',
     borderColor: 'red',
-    backgroundColor: 'red',
+    backgroundColor: 'transparent',
     pointBorderWidth: 0,
     borderWidth: 2,
     borderDash: [2, 5]

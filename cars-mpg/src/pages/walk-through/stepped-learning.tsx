@@ -5,44 +5,8 @@ import { useState } from 'react';
 import { ChartConfiguration, LineControllerDatasetOptions, LineOptions } from 'chart.js';
 import { ContainedButton } from '../../components/mdc';
 
-const trainX = [
-  3.3,
-  4.4,
-  5.5,
-  6.71,
-  6.93,
-  4.168,
-  9.779,
-  6.182,
-  7.59,
-  2.167,
-  7.042,
-  10.791,
-  5.313,
-  7.997,
-  5.654,
-  9.27,
-  3.1,
-];
-const trainY = [
-  1.7,
-  2.76,
-  2.09,
-  3.19,
-  1.694,
-  1.573,
-  3.366,
-  2.596,
-  2.53,
-  1.221,
-  2.827,
-  3.465,
-  1.65,
-  2.904,
-  2.42,
-  2.94,
-  1.3,
-];
+const trainX = [3.3, 4.4, 5.5, 6.71, 6.93, 4.168, 9.779, 6.182, 7.59, 2.167, 7.042, 10.791, 5.313, 7.997, 5.654, 9.27, 3.1,];
+const trainY = [1.7, 2.76, 2.09, 3.19, 1.694, 1.573, 3.366, 2.596, 2.53, 1.221, 2.827, 3.465, 1.65, 2.904, 2.42, 2.94, 1.3,];
 
 const m = tf.variable(tf.scalar(0));
 const b = tf.variable(tf.scalar(0));
@@ -69,6 +33,7 @@ function train() {
     return stepLoss as Scalar;
   });
 }
+
 type Data = Array<{ x: number; y: number }>;
 function plotData(): Data {
   const data = [];
@@ -115,8 +80,25 @@ const config: Partial<ChartConfiguration> = {
   },
 };
 
+
 const dashed: Partial<LineControllerDatasetOptions> = {
-  pointStyle: 'circle',
+  pointStyle: (sCtx, options) => {
+    const coord = sCtx.raw as { x: number, y: number }
+    const canv = document.createElement('canvas')
+    const WIDTH = 200
+    const HEIGHT = 16
+    canv.height = HEIGHT;
+    canv.width = WIDTH;
+    const ctx = canv.getContext('2d') as CanvasRenderingContext2D;
+    ctx.fillStyle = 'blue';
+    const circle = new Path2D();
+    circle.arc(WIDTH/2, HEIGHT/2, 5, 0, 2 * Math.PI);
+    ctx.fill(circle);
+
+    ctx.font = "14px Arial";
+    ctx.fillText(`( y = ${coord.y} )`, 25, HEIGHT - 5)
+    return canv;
+  },
   borderColor: 'blue',
   backgroundColor: 'blue',
   pointBorderWidth: 4,
