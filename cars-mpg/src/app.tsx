@@ -9,7 +9,7 @@ import styles from './app.module.scss';
 const App = () => (
   <Router>
     <main className={styles.main}>
-      <h1 className="text-center text-3xl">Machine Learning for cars mpg</h1>
+      <h1 className="text-center text-3xl">Machine Learning</h1>
 
       <nav>
         <Tabs>
