@@ -24,8 +24,8 @@ function loss(prediction: Tensor, labels: Tensor) {
 }
 
 function train() {
-  const learningRate = 0.005;
-  const optimizer = tf.train.sgd(learningRate);
+  const LEARNING_RATE = 0.005;
+  const optimizer = tf.train.sgd(LEARNING_RATE);
 
   optimizer.minimize(() => {
     const predsYs = predict(tf.tensor1d(trainX));

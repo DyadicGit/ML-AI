@@ -18,6 +18,7 @@ import mseExpandedCurrentGuess from '../../images/LinR - MSE with respect to X &
 import mseExpandedDiff from '../../images/LinR - MSE with respect to X & C-differences.png';
 import mseExpandedSlope from '../../images/LinR - MSE with respect to X & C-slopes.png';
 import { useState } from 'react';
+import WithModel from "./with-model";
 
 // const multSymbol = '&#215;'
 
@@ -147,6 +148,7 @@ const WalkThrough = () => {
           <li><a href="https://codepen.io/topic/tensorflow/picks">CODEPEN: Tensorflow examples</a></li>
         </ul>
       </aside>
+      <WithModel/>
     </section>
   );
 };
