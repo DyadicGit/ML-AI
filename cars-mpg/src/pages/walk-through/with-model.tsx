@@ -6,6 +6,9 @@ import { Plot } from '../../components';
 import { Logs } from "@tensorflow/tfjs-layers/src/logs";
 import styles from './walk-through.module.scss';
 
+import codeGetWeights from '../../images/Linear Regression getWeights.png';
+import codeLinRegWithTSModels from '../../images/Linear Regression with tensorflow model.png';
+
 const trainX = [3.3, 4.4, 5.5, 6.71, 6.93, 4.168, 9.779, 6.182, 7.59, 2.167, 7.042, 10.791, 5.313, 7.997, 5.654, 9.27, 3.1,];
 const trainY = [1.7, 2.76, 2.09, 3.19, 1.694, 1.573, 3.366, 2.596, 2.53, 1.221, 2.827, 3.465, 1.65, 2.904, 2.42, 2.94, 1.3,];
 
@@ -31,14 +34,11 @@ async function linearRegression(onEpochEnd?: CallbackFn, iterationsCount: number
     metrics: [tf.metrics.meanAbsoluteError],
   });
 
-  // Generate some synthetic data for training.
   const xs = tf.tensor2d(trainX, [trainX.length, 1]);
   const ys = tf.tensor2d(trainY, [trainX.length, 1]);
 
-  // Train the model using the data then do inference on a data point the
-  // model hasn't seen:
+  // Train the model using the data
   await model.fit(xs, ys, {
-    shuffle: true,
     epochs: iterationsCount,
     callbacks: {
       onEpochEnd: (...params) => onEpochEnd?.(model, ...params),
@@ -73,7 +73,7 @@ const WithModel = () => {
   const [weights, setWeights] = useState<{ m: number; b: number }>({ m: 0, b: 0 });
   const [mseDependency, setMseDep] = useState<Data>([])
   const populateMseDep: CallbackFn = async (model, epoch, logs) => {
-    setMseDep((prevMse) => prevMse.concat({x: epoch, y: (logs as Logs).meanAbsoluteError}))
+    setMseDep((prevMse) => prevMse.concat({x: epoch, y: (logs as Logs).loss}))
   }
 
   const handleOnClick = async () => {
@@ -137,6 +137,7 @@ const WithModel = () => {
         animation: false,
         scales: {
           y: { min: 0, max: 4.5 },
+          x: { min: 0, max: 12 }
         },
         plugins: {
           legend: { labels: { font: { size: 16 } } },
@@ -147,23 +148,27 @@ const WithModel = () => {
   );
 
   return (
-    <aside>
-      <h2>With TensorFlow.js models</h2>
+    <>
+      <h2>The same but with TensorFlow.js models</h2>
+      <img src={codeLinRegWithTSModels} alt="Linear regression code with using TensorFlow.js model"/>
       <p>
         There are 2 weights in total, 2 per dense layer. The equation <code>y = Ax + b</code> where <code>A</code> (the
         kernel) and <code>b</code> (the bias) are parameters of the dense layer.
       </p>
+      <img src={codeGetWeights} alt="bonus code to get weights" style={{width: '50%'}}/>
+
       <h4>m={weights.m}</h4>
       <h4>b={weights.b}</h4>
       <ContainedButton onClick={handleOnClick}>Train</ContainedButton>
       <input className={styles.iterationsInput} type="number" onChange={(e) => {
         // @ts-ignore
         setEpochs(Number(e.target.value));
+        setMseDep([]);
       }} value={epochs}/>
       <Plot config={config} />
       <h2>Mean Square Error vs. Iterations dependency graph</h2>
       <Plot config={mseVsIterations}/>
-    </aside>
+    </>
   );
 };
 

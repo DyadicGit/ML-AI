@@ -20,7 +20,38 @@ import mseExpandedSlope from '../../images/LinR - MSE with respect to X & C-slop
 import { useState } from 'react';
 import WithModel from "./with-model";
 
-// const multSymbol = '&#215;'
+/*
+const trainX = [3.3, 4.4, 5.5, 6.71, 6.93, 4.168, 9.779, 6.182, 7.59, 2.167, 7.042, 10.791, 5.313, 7.997, 5.654, 9.27, 3.1,];
+const trainY = [1.7, 2.76, 2.09, 3.19, 1.694, 1.573, 3.366, 2.596, 2.53, 1.221, 2.827, 3.465, 1.65, 2.904, 2.42, 2.94, 1.3,];
+
+const LEARNING_RATE = 0.005;
+const iterationsCount: number = 100
+
+async function linearRegressionModel() {
+  // Define a model for linear regression.
+  const model = tf.sequential();
+  model.add(
+    tf.layers.dense({ units: 1, inputShape: [1] })
+  );
+
+  // Prepare the model for training: Specify the loss and the optimizer.
+  model.compile({
+    loss: 'meanSquaredError',
+    optimizer: tf.train.sgd(LEARNING_RATE),
+  });
+
+  const xs = tf.tensor2d(trainX, [trainX.length, 1]);
+  const ys = tf.tensor2d(trainY, [trainX.length, 1]);
+
+  // Train the model using the data
+  await model.fit(xs, ys, { epochs: iterationsCount } );
+  // @ts-ignore
+  model.predict(tf.tensor2d([5.3], [1, 1])).print();
+
+  model.summary();
+  return model;
+}
+*/
 
 // weights is a tensor/matrix of shape [1,1] with zeros
 /*let weights = // | 0 |
@@ -142,13 +173,13 @@ const WalkThrough = () => {
       <img src={linRegMatrixMult} alt="calculate the predicted value" />
       <h2>how matrix multiplication works</h2>
       <img src={matrixMultExplanation} alt="how matrix multiplication works" />
+      <WithModel/>
       <aside>
         <h3>capabilities of TensorFlow</h3>
         <ul>
           <li><a href="https://codepen.io/topic/tensorflow/picks">CODEPEN: Tensorflow examples</a></li>
         </ul>
       </aside>
-      <WithModel/>
     </section>
   );
 };
